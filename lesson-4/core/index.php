@@ -23,7 +23,22 @@ function renderTemplate($template, $params = [])
   }
 }
 
-function upload_image($files, $upload_dir)
+function getFiles($dir)
+{
+  $items = array_splice(scandir($dir), 2);
+
+  $results = [];
+  
+  foreach ($items as $item) {
+    if (is_file($dir . $item)) {
+      $results[] = $item;
+    }
+  }
+
+  return $results;
+}
+
+function upload_image($files, $upload_dir, $thumbnail_path)
 {
   $file_name = basename($files['name']);
   $upload_file = $upload_dir . $file_name;
@@ -54,8 +69,19 @@ function upload_image($files, $upload_dir)
   }
  
   if (move_uploaded_file($files['tmp_name'], $upload_file)) {
+    if ($thumbnail_path) {
+      createThumbnail($upload_file, $thumbnail_path . $file_name);
+    }
     return 'Файл успешно загружен.';
   } else {
     return 'Загрузка не получилась.';
   }
+}
+
+function createThumbnail($original_path, $thumbnail_path)
+{
+  $si = new SimpleImage;
+  $si->load($original_path);
+  $si->resizeToWidth(150);
+  $si->save($thumbnail_path);
 }
