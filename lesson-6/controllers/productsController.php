@@ -8,10 +8,10 @@ function productsController($id = null)
     $params['product'] = getProduct($id);
 
     if ( ! empty($params['product'])) {
-      $params['feedbacks'] = getFeedbacks($id);
       $params['button'] = 'Отправить';
       $params['action'] = 'add';
-      $params = array_merge($params, doFeedbackAction() ?? []);
+      $params = array_merge($params, doFeedbackAction());
+      $params['feedbacks'] = getFeedbacks($id);
       $template = 'product';
     } else {
       die(ERROR_404);

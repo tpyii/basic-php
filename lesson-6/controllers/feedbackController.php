@@ -9,16 +9,14 @@ function feedbackController()
 
 function doFeedbackAction()
 {
+  $params = [];
+
   if ($_GET['action'] === 'edit') {
-    $params = [];
     $id = (int) $_GET['id'];
 
     $params['feedback'] = getFeedback($id);
     $params['action'] = 'save';
-    $params['action_url'] = '/feedback';
     $params['button'] = 'Изменить';
-
-    return $params;
   }
 
   if ($_GET['action'] === 'delete') {
@@ -29,7 +27,7 @@ function doFeedbackAction()
 
       $path = parse_url($_SERVER['HTTP_REFERER'])['path'];
 
-      header("Location: {$path}");
+      header("Location: {$path}#feedback");
       die;
     }
   }
@@ -44,7 +42,7 @@ function doFeedbackAction()
       
       $path = parse_url($_SERVER['HTTP_REFERER'])['path'];
 
-      header("Location: {$path}");
+      header("Location: {$path}#feedback");
       die;
     }
   }
@@ -59,8 +57,10 @@ function doFeedbackAction()
 
       $path = parse_url($_SERVER['HTTP_REFERER'])['path'];
 
-      header("Location: {$path}");
+      header("Location: {$path}#feedback");
       die;
     }
   }
+
+  return $params;
 }
