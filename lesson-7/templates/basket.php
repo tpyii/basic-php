@@ -9,6 +9,14 @@
       <th></th>
     </tr>
   </thead>
+  <tfoot>
+    <tr>
+      <td></td>
+      <td></td>
+      <td><?= $total ?></td>
+      <td><a href="/order">Оформить заказ</a></td>
+    </tr>
+  </tfoot>
   <?php foreach ($items as $item): ?>
     <tr>
       <td><img src="/img/small/<?= $item['image'] ?>" alt="<?= $item['image'] ?>" /></td>
@@ -24,7 +32,6 @@
     </tr>
   <?php endforeach ?>
 </table>
-<a href="/order">Оформить заказ</a>
 <?php else: ?>
   <p>Корзина пуста</p>
 <?php endif ?>

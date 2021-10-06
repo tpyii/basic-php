@@ -10,9 +10,9 @@ function addBasketItem($product_id, $session_id)
   return executeSql("INSERT INTO basket (product_id, session_id) VALUES ({$product_id}, '{$session_id}')");
 }
 
-function deleteBasketItem($id)
+function deleteBasketItem($id, $session_id)
 {
-  return executeSql("DELETE FROM basket WHERE id = {$id}");
+  return executeSql("DELETE FROM basket WHERE id = {$id} AND session_id = '{$session_id}'");
 }
 
 function getBasketItems($session_id)
@@ -51,4 +51,15 @@ function getBasketById($id)
 function getCountBasketItems($session_id)
 {
   return fetchOneAssoc("SELECT COUNT(*) count FROM basket WHERE session_id = '{$session_id}'")['count'];
+}
+
+function getTotalBasket($session_id)
+{
+  return fetchOneAssoc("
+    SELECT 
+      SUM(p.price) total
+    FROM basket b
+      JOIN products p ON p.id = b.product_id
+    WHERE session_id = '{$session_id}'
+  ")['total'];
 }

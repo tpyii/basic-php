@@ -22,6 +22,12 @@ function orderController($id)
       $params['items'] = getBasketById($id);
     }
   } else {
+
+    if ( ! getCountBasketItems(session_id())) {
+      header("Location: " . HOME_PAGE);
+      die;
+    }
+
     $params['title'] = 'Оформление заказа';
   }
   

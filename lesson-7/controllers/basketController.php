@@ -19,7 +19,7 @@ function basketController()
     $id = (int) $_POST['id'];
 
     if ($id) {
-      existsBasketItem($id) ? deleteBasketItem($id) : die(ERROR_404);
+      existsBasketItem($id) ? deleteBasketItem($id, session_id()) : die(ERROR_404);
 
       $path = parse_url($_SERVER['HTTP_REFERER'])['path'];
       
@@ -33,6 +33,7 @@ function basketController()
     'params' => [
       'title' => 'Корзина',
       'items' => getBasketItems(session_id()),
+      'total' => getTotalBasket(session_id()),
     ],
   ];
 }
