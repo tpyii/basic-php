@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost:8889
--- Время создания: Окт 05 2021 г., 12:22
+-- Время создания: Окт 07 2021 г., 18:07
 -- Версия сервера: 5.7.32
 -- Версия PHP: 7.4.12
 
@@ -31,6 +31,7 @@ USE `basic-php`;
 CREATE TABLE `basket` (
   `id` int(10) UNSIGNED NOT NULL,
   `product_id` int(10) UNSIGNED NOT NULL,
+  `price` decimal(10,2) UNSIGNED NOT NULL,
   `session_id` varchar(255) COLLATE utf8mb4_unicode_520_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
@@ -65,7 +66,7 @@ CREATE TABLE `images` (
 --
 
 INSERT INTO `images` (`id`, `name`, `views`, `product_id`) VALUES
-(1, '01.jpg', 27, 1),
+(1, '01.jpg', 28, 1),
 (2, '02.jpg', 2, 2),
 (3, '03.jpg', 1, 3),
 (4, '04.jpg', 5, 4),
@@ -90,7 +91,9 @@ INSERT INTO `images` (`id`, `name`, `views`, `product_id`) VALUES
 CREATE TABLE `orders` (
   `id` int(10) UNSIGNED NOT NULL,
   `phone` int(10) UNSIGNED NOT NULL,
-  `session_id` varchar(255) COLLATE utf8mb4_unicode_520_ci NOT NULL
+  `status` enum('moderation','canceled','completed') COLLATE utf8mb4_unicode_520_ci NOT NULL DEFAULT 'moderation',
+  `session_id` varchar(255) COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `user_id` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 -- --------------------------------------------------------
@@ -144,7 +147,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `login`, `password`) VALUES
-(1, 'admin', '$2y$10$FcP7vF/HgoYIhHQ8WJdHH.RmNh9yHu1ySMvhGt7kxMND.UIYaYrgO');
+(1, 'admin', '$2y$10$DOng6Spj7PIqC3ROIlFeruh7KprbuCUVNU48QtzxZ/7yQsNZQhMOS');
 
 --
 -- Индексы сохранённых таблиц
@@ -175,7 +178,8 @@ ALTER TABLE `images`
 -- Индексы таблицы `orders`
 --
 ALTER TABLE `orders`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `orders_user_id_foreign` (`user_id`);
 
 --
 -- Индексы таблицы `products`
@@ -250,6 +254,12 @@ ALTER TABLE `feedbacks`
 --
 ALTER TABLE `images`
   ADD CONSTRAINT `images_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `orders`
+--
+ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
