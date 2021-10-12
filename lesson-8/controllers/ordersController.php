@@ -2,6 +2,10 @@
 
 function ordersController()
 {
+  if ( ! isAuth()) {
+    redirect(HOME_PAGE);
+  }
+
   return [
     'template' => 'orders',
     'params' => [

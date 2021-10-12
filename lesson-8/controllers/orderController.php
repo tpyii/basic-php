@@ -27,7 +27,7 @@ function orderController($id)
     }
   }
 
-  if ( ! empty($id)) {
+  if ( ! empty($id) && isAuth()) {
     $id = (int) $id;
 
     if ($id && isAdmin() || existsOrderUser($id, $_SESSION['id'])) {
@@ -37,11 +37,13 @@ function orderController($id)
       if (isAdmin()) {
         $params['order'] = getOrder($id);
       }
+    } else {
+      redirect('/' . HOME_PAGE);
     }
   } else {
 
     if ( ! getCountBasketItems(session_id())) {
-      redirect(HOME_PAGE);
+      redirect('/' . HOME_PAGE);
     }
 
     $params['title'] = 'Оформление заказа';
